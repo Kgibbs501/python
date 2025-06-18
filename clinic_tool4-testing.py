@@ -339,6 +339,26 @@ class ClinicInfoTool(QWidget):
                     display_text = f"{clinic} - {clinic_name} (CM: {cm})"
                     self.clinics_list.addItem(display_text)
 
+    def update_clinics(self, area_name: str = "all areas"):
+        self.clinics_list.clear()
+        area_name = area_name.lower().split(' (do:', 1)[0]
+        if area_name == "all areas":
+            clinics = self.df['Fac#'].unique()
+        else:
+            clinics = self.df[self.df['Area'].str.lower().str.strip() == area_name]['Fac#'].unique()
+
+        clinics = list(map(str, clinics))
+        clinics = [c for c in clinics if c]
+        clinics.sort()
+
+        for clinic in clinics:
+            if clinic.isdigit():
+                clinic_data = self.df[self.df['Fac#'] == int(clinic)].iloc[0]
+                clinic_name = clinic_data['Clinic Name']
+                cm = self._handle_nan(clinic_data['Clinic Manager'])
+                display_text = f"{clinic} - {clinic_name} (CM: {cm})"
+                self.clinics_list.addItem(display_text)
+
     def on_clinic_clicked(self, item):
         clinic_number = item.text().split(' -', 1)[0]  # Extract the clinic number from the text
         self.clinic_number_input.setText(clinic_number)  # Set the clinic number in the input field
