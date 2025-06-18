@@ -318,7 +318,7 @@ class ClinicInfoTool(QWidget):
         self.clinic_number_input.setText(clinic_number)  # Set the clinic number in the input field
         self.get_clinic_info()  # Call the method to display the clinic details
 
-    def update_clinics(self, area_name: str):
+    def update_clinics(self, area_name: str = "all areas"):
         self.clinics_list.clear()
         area_name = area_name.lower().split(' (do:', 1)[0]
         if area_name == "all areas":
